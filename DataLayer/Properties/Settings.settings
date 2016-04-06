@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SimpleConcurrency.DataLayer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="GetAllXUsersCmd" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SELECT * FROM XUsers WHERE IsDeleted = 0</Value>
+    </Setting>
+    <Setting Name="GetAllYUsersCmd" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SELECT * FROM YUsers WHERE IsDeleted = 0</Value>
+    </Setting>
+    <Setting Name="GetYUserForEditingSPName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">GetYUserForEditing</Value>
+    </Setting>
+    <Setting Name="AddYUserCmd" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">insert into YUsers (FirstName, LastName) values(@FirstName, @LastName); SELECT SCOPE_IDENTITY()</Value>
+    </Setting>
+    <Setting Name="AddXUserCmd" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">insert into XUsers (FirstName, LastName, IsDeleted, UpdateDate) values(@FirstName, @LastName, @IsDeleted, @UpdateDate); SELECT SCOPE_IDENTITY()</Value>
+    </Setting>
+    <Setting Name="DeleteXUserSpName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DeleteXUser</Value>
+    </Setting>
+    <Setting Name="DeleteYUserSPName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DeleteYUser</Value>
+    </Setting>
+    <Setting Name="UpdateXUserSPName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">UpdateXUser</Value>
+    </Setting>
+    <Setting Name="UpdateYUserSPName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">UpdateYUser</Value>
+    </Setting>
+    <Setting Name="ReleaseYUserSPName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ReleaseYUser</Value>
+    </Setting>
+    <Setting Name="GetXUserCmd" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SELECT * FROM XUsers WHERE Id=@Id AND IsDeleted = 0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

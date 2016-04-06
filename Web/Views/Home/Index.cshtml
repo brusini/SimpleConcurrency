@@ -1,0 +1,157 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="dialog-form" title="Login">
+    <form>
+        <fieldset>
+            <label for="userName">User Name</label>
+            <input type="text" name="userName" id="userName" value="" class="text ui-widget-content ui-corner-all">
+            <input type="submit" id="sbmUserName" tabindex="-1" style="position: absolute; top: -1000px">
+        </fieldset>
+    </form>
+</div>
+
+<div id="dlgEditXUser">
+    <form>
+        <fieldset>
+            <label for="idX">User Id</label>
+            <input type="text" name="idX" id="idX" value="" readonly="readonly" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+        <fieldset>
+            <label for="firstXName">First Name</label>
+            <input type="text" name="firstXName" id="firstXName" value="" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+        <fieldset>
+            <label for="lastXName">Last Name</label>
+            <input type="text" name="lastXName" id="lastXName" value="" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+        <input type="hidden" name="hdnUpdateDate" id="hdnUpdateDate" value="">
+    </form>
+</div>
+
+<div id="dlgEditYUser">
+    <form>
+        <fieldset>
+            <label for="idY">User Id</label>
+            <input type="text" name="idY" id="idY" value="" readonly="readonly" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+        <fieldset>
+            <label for="firstYName">First Name</label>
+            <input type="text" name="firstYName" id="firstYName" value="" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+        <fieldset>
+            <label for="lastYName">Last Name</label>
+            <input type="text" name="lastYName" id="lastYName" value="" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+        <input type="hidden" name="hdnOwner" id="hdnOwner" value="">
+    </form>
+</div>
+
+<div id="dlgResolveXUser">
+    <form>
+        <fieldset>
+            <p>Database User detail:</p>
+            First Name: <label name="firstNameA" id="firstNameA"></label><br />
+            Last Name: <label name="lastNameA" id="lastNameA"></label><br />
+            Version: <label name="versionA" id="versionA"></label>
+        </fieldset>
+        <fieldset>
+            <p>Your User detail:</p>
+            First Name: <label name="firstNameB" id="firstNameB"></label><br />
+            Last Name: <label name="lastNameB" id="lastNameB"></label><br />
+            Version: <label name="versionB" id="versionB"></label>
+        </fieldset>
+        <fieldset>
+            <p>Apply changes to:</p>
+            <div>
+                <input type="radio" name="rbConflict" value="1"> First Name</input>
+                <input type="radio" name="rbConflict" value="2"> Last Name</input>
+                <input type="radio" name="rbConflict" value="3"> Whole record</input>
+            </div>
+        </fieldset>
+        <input type="hidden" name="hdnUserId" id="hdnUserId" value="">
+        <input type="hidden" name="hdnUpdateDate" id="hdnUpdateDate" value="">
+    </form>
+</div>
+
+<div id="dlgNewUser">
+    <form>
+        <fieldset>
+            <label for="firstName">First Name</label>
+            <input type="text" name="firstName" id="firstName" value="" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+        <fieldset>
+            <label for="lastName">Last Name</label>
+            <input type="text" name="lastName" id="lastName" value="" class="text ui-widget-content ui-corner-all">
+        </fieldset>
+    </form>
+</div>
+
+<h3>X Users</h3>
+<p>
+    <div class="validationSummary" id="validationSummaryX"></div>
+</p>
+<table id="xUsers" class="hoverTable">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div>
+    <br />
+    <input type="button" name="refreshX" id="refreshX" value="Refresh" class="text ui-widget-content ui-corner-all" />
+    <input type="button" name="addX" id="addX" value="Add new X user" class="text ui-widget-content ui-corner-all" />
+</div>
+
+<h3>Y Users</h3>
+<p>
+    <div class="validationSummary" id="validationSummaryY"></div>
+</p>
+<table id="yUsers" class="hoverTable">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Owner Id</th>
+            <th>Blocked</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<div>
+    <br />
+    <input type="button" name="refreshY" id="refreshY" value="Refresh" class="text ui-widget-content ui-corner-all" />
+    <input type="button" name="addY" id="addY" value="Add new Y user" class="text ui-widget-content ui-corner-all" />
+</div>
+
+
+@section scripts{
+
+    <script id="tmpXCell" type="text/x-jquery-tmpl">
+        <tr id="${Id}" fname="${FirstName}" lname="${LastName}" updateDate="${EpochUpdateDate}">
+            <td>${Id}</td>
+            <td>${FirstName}</td>
+            <td>${LastName}</td>
+        </tr>
+    </script>
+
+    <script id="tmpYCell" type="text/x-jquery-tmpl">
+        <tr {{if IsBlocked == true}} class="blocked" {{/if}} id="${Id}" fname="${FirstName}" lname="${LastName}" owner="${OwnerId}" blocked="${IsBlocked}">
+            <td>${Id}</td>
+            <td>${FirstName}</td>
+            <td>${LastName}</td>
+            <td>${OwnerId}</td>
+            <td>${IsBlocked}</td>
+        </tr>
+    </script>
+
+    @Scripts.Render("~/bundles/simpleConcurr")
+}
