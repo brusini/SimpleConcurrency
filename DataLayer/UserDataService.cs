@@ -134,6 +134,7 @@ namespace SimpleConcurrency.DataLayer
 	                SET NOCOUNT, XACT_ABORT ON;
 
 	                BEGIN TRY
+                        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 		                BEGIN TRANSACTION
 	
 		                IF EXISTS(SELECT * FROM YUsers WHERE Id = @id AND IsBlocked = 1 AND OwnerId != @owner) BEGIN
@@ -255,6 +256,7 @@ namespace SimpleConcurrency.DataLayer
 	                SET NOCOUNT, XACT_ABORT ON;
 
 	                BEGIN TRY
+                        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 		                BEGIN TRANSACTION
 
 		                IF EXISTS(SELECT * FROM XUsers WHERE Id = @id AND (UpdateDate != @updateDate OR IsDeleted = 1)) BEGIN
@@ -311,6 +313,7 @@ namespace SimpleConcurrency.DataLayer
 	                SET NOCOUNT, XACT_ABORT ON;
 
 	                BEGIN TRY
+                        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 		                BEGIN TRANSACTION
 		                IF EXISTS(SELECT * FROM YUsers WHERE Id = @id AND ((IsBlocked = 1 AND OwnerId != @ownerId) OR IsDeleted = 1)) BEGIN
 			                ROLLBACK TRANSACTION
@@ -369,6 +372,7 @@ namespace SimpleConcurrency.DataLayer
 	                SET NOCOUNT, XACT_ABORT ON;
 
 	                BEGIN TRY
+                        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 		                BEGIN TRANSACTION
 
 		                IF EXISTS(SELECT * FROM XUsers WHERE Id = @id AND IsDeleted = 1) BEGIN
@@ -436,6 +440,7 @@ namespace SimpleConcurrency.DataLayer
 	                SET NOCOUNT, XACT_ABORT ON;
 
 	                BEGIN TRY
+                        SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 		                BEGIN TRANSACTION
 	
 		                IF EXISTS(SELECT * FROM YUsers WHERE Id = @id AND IsBlocked = 1 AND OwnerId != @ownerId) BEGIN
@@ -494,15 +499,33 @@ namespace SimpleConcurrency.DataLayer
 	                @id int,
 	                @ownerId nvarchar(50)
                 AS
-	                IF EXISTS(SELECT * FROM YUsers WHERE Id = @id AND IsBlocked = 0 AND OwnerId != @ownerId) RETURN -1
+	                SET NOCOUNT, XACT_ABORT ON;
 
-	                UPDATE YUsers 
-	                SET 
-		                OwnerId = NULL,
-		                IsBlocked = 0
-	                WHERE Id = @id
+	                BEGIN TRY
+		                SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+		                BEGIN TRANSACTION
 
+		                IF EXISTS(SELECT * FROM YUsers WHERE Id = @id AND IsBlocked = 0 AND OwnerId != @ownerId) BEGIN
+			                ROLLBACK TRANSACTION
+			                RETURN -1
+		                END
+
+		                UPDATE YUsers 
+		                SET 
+			                OwnerId = NULL,
+			                IsBlocked = 0
+		                WHERE Id = @id
+
+		                COMMIT TRANSACTION
+	                END TRY
+	                BEGIN CATCH
+		                IF XACT_STATE() <> 0 
+		                ROLLBACK TRANSACTION
+	                RAISERROR ('Error in executing transaction', 16, 1)
+	                END CATCH
                 RETURN 0
+
+
                 */
                 #endregion
                 using (var command = new SqlCommand(Settings.Default.ReleaseYUserSPName, connection))
